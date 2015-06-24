@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title></title>
+    <script src="jquery-1.8.3.min.js"></script>
+    <script>
+        function jsonp() {
+            $.ajax({
+                url : "http://221.122.102.170/mp.training/server/framework/server.php?action=wordList.list",
+                dataType: "jsonp",
+                success : function(data) {
+                    console.log(data);
+                    console.log(data.count);
+                },
+                jsonpCallback : 'callback'
+            });
+        }
+        //callback和success，会先执行callback再执行success,如果没有callback会直接执行success；
+        function callback(data) {
+            console.log("ok");
+        }
+        var url="http://221.122.102.170/mp.training/server/framework/server.php";
+        function display(){
+            var params={
+                action:'wordList.list',
+                callback:'func1'
+            };
+            var lUrl=url+"?"+ $.param(params);
+            $.getScript(lUrl);
+        }
+        function func1(data) {
+            console.log(data);
+            console.log(data.count);
+        }
+    </script>
+</head>
+<body>
+<button onclick="jsonp()">JSONP</button>
+<button onclick="display()">display</button>
+<button id="btn">点击</button>
+<script>
+    $("#btn").click(function(){
+        alert("ok");
+    })
+</script>
+</body>
+</html>

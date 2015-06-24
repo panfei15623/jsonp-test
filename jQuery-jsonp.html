@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <title>jQuery实现jsonp</title>
+    <!--<script src="jquery-1.8.3.min.js"></script>-->
+</head>
+<body>
+  <script>
+//        var url = "http://221.122.102.170/mp.training/server/framework/server.php?action=wordList.list&callback=callbackfunction";
+//        var script = document.createElement('script');
+//        script.setAttribute('src', url);  //load javascript
+//        document.getElementsByTagName('head')[0].appendChild(script);
+//
+//        //回调函数
+//        function callbackfunction(data){
+//            var html=data.count;
+//            alert(html);
+//        }
+    var $ = {};
+    $.ajax = function(param) {
+        var url = param.url,
+            success =  param.success,
+            callback = param.jsonpCallback;
+       //callback是在全局作用域执行的
+        window[callback] = function(data) {
+            success(data);
+        }
+        var script = document.createElement("script");
+        script.src = url+"&callback="+callback;
+        document.body.insertBefore(script,document.body.firstChild);
+    }
+     $.ajax({
+           url:'http://221.122.102.170/mp.training/server/framework/server.php?action=wordList.list',
+           dataType:'jsonp',
+           jsonpCallback:'func',
+           success:function(data) {
+               console.log(data);
+               console.log(data.count);
+           }
+        });
+
+//            $.ajax({
+//                url:"http://221.122.102.170/mp.training/server/framework/server.php",
+//                data:{
+//                    action:'wordList.list'
+//                },
+//                callBack:'func',
+//                dataType:'jsonp',
+//                success:function(data) {
+//                    console.log(data);
+//                    console.log(data.count);
+//                }
+//            })
+    </script>
+</body>
+</html>
